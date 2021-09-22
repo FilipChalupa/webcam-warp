@@ -9,11 +9,28 @@
 	<meta name="color-scheme" content="dark" />
 	<script src="script.js" defer></script>
 	<style>
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+		}
+
 		body {
 			font-family: sans-serif;
 			text-align: center;
 			background-color: black;
 			color: white;
+			min-height: 100vh;
+			display: grid;
+			align-items: center;
+			margin: 0;
+			padding: 1em;
+		}
+
+		.canvas {
+			position: absolute;
+			top: 0;
+			left: 0;
 		}
 	</style>
 </head>
@@ -28,7 +45,9 @@
 			</select>
 		</label>
 	</div>
-	<video class="video" autoplay></video>
+	<div class="canvas">
+		<video class="video" autoplay></video>
+	</div>
 </body>
 
 </html>
