@@ -52,15 +52,14 @@
 		cameras.some((camera) => camera.deviceId === lastDeviceId)
 	) {
 		selectCamera(lastDeviceId)
-	} else {
-		$pickerCameraSelect.innerHTML = ''
-		$pickerCameraSelect.innerHTML += `<option>Choose</option>`
-		cameras.forEach((camera, i) => {
-			$pickerCameraSelect.innerHTML += `<option value="${camera.deviceId}">${
-				camera.label || `Camera ${i + 1}`
-			}</option>`
-		})
 	}
+	$pickerCameraSelect.innerHTML = ''
+	$pickerCameraSelect.innerHTML += `<option>Choose</option>`
+	cameras.forEach((camera, i) => {
+		$pickerCameraSelect.innerHTML += `<option value="${camera.deviceId}">${
+			camera.label || `Camera ${i + 1}`
+		}</option>`
+	})
 
 	$pickerCameraSelect.addEventListener('change', () => {
 		selectCamera($pickerCameraSelect.value)
@@ -76,7 +75,6 @@
 			offsetY = event.clientY - handlesPositions[i].y
 		}
 		const onMove = (event) => {
-			console.log(event.clientX, event.clientY)
 			handlesPositions[i].x = event.clientX - offsetX
 			handlesPositions[i].y = event.clientY - offsetY
 			updateHandlesPositions()
