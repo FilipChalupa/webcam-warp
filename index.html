@@ -62,20 +62,21 @@
 			--x: -1000px;
 			--y: -1000px;
 			--scale: 1;
+			--color-a: #ffffff80;
+			--color-b: #00000080;
 			position: absolute;
 			top: 0;
 			left: 0;
 			padding: 0;
-			color: #ffffff;
+			color: var(--color-a);
 			border: 3px solid;
-			background-color: #000000;
+			background-color: var(--color-b);
 			width: 30px;
 			height: 30px;
 			border-radius: 50%;
 			transform: translate(var(--x), var(--y)) translate(-50%, -50%) scale(var(--scale));
 			cursor: grab;
 			outline: none;
-			opacity: 0.5;
 		}
 
 		.handle::before,
@@ -99,9 +100,15 @@
 			--scale: 1.5;
 		}
 
+		.is-shifting .handle {
+			--color-a: #000000;
+			--color-b: #ffffff;
+		}
+
 		.handle:active {
 			cursor: grabbing;
-			color: #ff0000;
+			--color-a: #ffff00;
+			--color-b: transparent;
 		}
 	</style>
 </head>

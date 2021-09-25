@@ -12,6 +12,13 @@
 	const $pickerCameraSelect = $picker.querySelector('select')
 	const $handles = document.querySelectorAll('.handle')
 
+	$body.addEventListener('keydown', (event) => {
+		$body.classList.toggle('is-shifting', event.shiftKey)
+	})
+	$body.addEventListener('keyup', () => {
+		$body.classList.remove('is-shifting')
+	})
+
 	const handlesPositions = [
 		{ x: 0.1, y: 0.1 },
 		{ x: 0.9, y: 0.1 },
