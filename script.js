@@ -13,17 +13,25 @@
 	const $handles = document.querySelectorAll('.handle')
 
 	const handlesPositions = [
-		{ x: 0, y: 0 },
-		{ x: window.innerWidth, y: 0 },
-		{ x: 0, y: window.innerHeight },
-		{
-			x: window.innerWidth,
-			y: window.innerHeight,
-		},
-	].map((handle) => ({
-		...handle,
-		origin: { ...handle },
-	}))
+		{ x: 0.1, y: 0.1 },
+		{ x: 0.9, y: 0.1 },
+		{ x: 0.1, y: 0.9 },
+		{ x: 0.9, y: 0.9 },
+	]
+		.map((handle) => ({
+			...handle,
+			origin: { ...handle },
+		}))
+		.map((handle) => {
+			handle.x = handle.x * window.innerWidth
+			handle.y = handle.y * window.innerHeight
+			return {
+				...handle,
+				origin: {
+					...handle,
+				},
+			}
+		})
 
 	const updateHandlesPositions = () => {
 		$handles.forEach(($handle, i) => {
