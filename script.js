@@ -14,8 +14,8 @@
 
 	const handlesPositions = [
 		{ x: 0, y: 0 },
-		{ x: 0, y: window.innerHeight },
 		{ x: window.innerWidth, y: 0 },
+		{ x: 0, y: window.innerHeight },
 		{ x: window.innerWidth, y: window.innerHeight },
 	]
 
@@ -79,6 +79,21 @@
 			handlesPositions[i].x = event.clientX - offsetX
 			handlesPositions[i].y = event.clientY - offsetY
 			updateHandlesPositions()
+
+			const warpMatrix = Matrix.createWarpMatrix(
+				[0, 0],
+				[window.innerWidth, 0],
+				[0, window.innerHeight],
+				[window.innerWidth, window.innerHeight],
+				[handlesPositions[0].x, handlesPositions[0].y],
+				[handlesPositions[1].x, handlesPositions[1].y],
+				[handlesPositions[2].x, handlesPositions[2].y],
+				[handlesPositions[3].x, handlesPositions[3].y],
+			)
+
+			const transform =
+				'matrix3d(' + Matrix.convertMatrixtoCSS(warpMatrix).join(',') + ')'
+			$video.style.transform = transform
 		}
 		const onEnd = (event) => {
 			$handle.removeEventListener('pointermove', onMove)
