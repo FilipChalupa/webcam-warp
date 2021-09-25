@@ -94,6 +94,12 @@
 				deviceId: {
 					exact: deviceId,
 				},
+				width: {
+					ideal: window.innerWidth,
+				},
+				height: {
+					ideal: window.innerHeight,
+				},
 			},
 			audio: false,
 		}
