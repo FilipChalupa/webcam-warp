@@ -34,23 +34,50 @@
 			right: 0;
 			bottom: 0;
 			overflow: hidden;
+			display: none;
+		}
+
+		.show-canvas .canvas {
+			display: block;
+		}
+
+		.show-canvas .picker {
+			display: none;
+		}
+
+		.video {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: fill;
 		}
 
 		.handle {
 			--x: -1000px;
 			--y: -1000px;
+			--scale: 1;
 			position: absolute;
 			top: 0;
 			left: 0;
 			padding: 0;
 			border: 3px solid #fa5eff;
 			background-color: #2dff31;
-			width: 20px;
-			height: 20px;
+			width: 30px;
+			height: 30px;
 			border-radius: 50%;
-			transform: translate(var(--x), var(--y)) translate(-50%, -50%);
+			transform: translate(var(--x), var(--y)) translate(-50%, -50%) scale(var(--scale));
 			mix-blend-mode: difference;
 			cursor: grab;
+		}
+
+		.handle:hover {
+			--scale: 1.5;
+		}
+
+		.handle:active {
+			cursor: grabbing;
 		}
 	</style>
 </head>

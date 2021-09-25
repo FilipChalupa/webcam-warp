@@ -6,16 +6,17 @@
 		location.href = currentUrl.toString()
 	}
 
+	const $body = document.querySelector('body')
 	const $video = document.querySelector('.video')
 	const $picker = document.querySelector('.picker')
 	const $pickerCameraSelect = $picker.querySelector('select')
 	const $handles = document.querySelectorAll('.handle')
 
 	const handlesPositions = [
-		{ x: 100, y: 100 },
-		{ x: 100, y: 200 },
-		{ x: 200, y: 100 },
-		{ x: 200, y: 200 },
+		{ x: 0, y: 0 },
+		{ x: 0, y: window.innerHeight },
+		{ x: window.innerWidth, y: 0 },
+		{ x: window.innerWidth, y: window.innerHeight },
 	]
 
 	const updateHandlesPositions = () => {
@@ -37,7 +38,7 @@
 		}
 		const stream = await navigator.mediaDevices.getUserMedia(constraints)
 		$video.srcObject = stream
-		$picker.remove()
+		$body.classList.add('show-canvas')
 		updateHandlesPositions()
 	}
 
