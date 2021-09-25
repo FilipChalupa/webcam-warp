@@ -3,6 +3,7 @@
 	if (currentUrl.searchParams.get('reset') !== null) {
 		localStorage.removeItem('lastDeviceId')
 		localStorage.removeItem('positions')
+		localStorage.removeItem('hideUI')
 		currentUrl.searchParams.delete('reset')
 		location.href = currentUrl.toString()
 	}
@@ -15,10 +16,24 @@
 
 	$body.addEventListener('keydown', (event) => {
 		$body.classList.toggle('is-shifting', event.shiftKey)
+		if (event.code === 'KeyH') {
+			if (localStorage.getItem('hideUI') === null) {
+				localStorage.setItem('hideUI', '1')
+			} else {
+				localStorage.removeItem('hideUI')
+			}
+			updateHideUI()
+		}
 	})
 	$body.addEventListener('keyup', () => {
 		$body.classList.remove('is-shifting')
 	})
+
+	const updateHideUI = () => {
+		const hide = Boolean(localStorage.getItem('hideUI'))
+		$body.classList.toggle('view-hideUI', hide)
+	}
+	updateHideUI()
 
 	const storedPositions = localStorage.getItem('positions')
 	const handlesPositions = storedPositions
