@@ -83,6 +83,12 @@
 		const onMove = (event) => {
 			handlesPositions[i].x = event.clientX - offsetX
 			handlesPositions[i].y = event.clientY - offsetY
+
+			if (event.shiftKey) {
+				handlesPositions[i].originX = event.clientX - offsetX
+				handlesPositions[i].originY = event.clientY - offsetY
+			}
+
 			updateHandlesPositions()
 
 			const warpMatrix = Matrix.createWarpMatrix(
