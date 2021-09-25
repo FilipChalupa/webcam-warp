@@ -13,16 +13,17 @@
 	const $handles = document.querySelectorAll('.handle')
 
 	const handlesPositions = [
-		{ x: 0, y: 0, originX: 0, originY: 0 },
-		{ x: window.innerWidth, y: 0, originX: window.innerWidth, originY: 0 },
-		{ x: 0, y: window.innerHeight, originX: 0, originY: window.innerHeight },
+		{ x: 0, y: 0 },
+		{ x: window.innerWidth, y: 0 },
+		{ x: 0, y: window.innerHeight },
 		{
 			x: window.innerWidth,
 			y: window.innerHeight,
-			originX: window.innerWidth,
-			originY: window.innerHeight,
 		},
-	]
+	].map((handle) => ({
+		...handle,
+		origin: { ...handle },
+	}))
 
 	const updateHandlesPositions = () => {
 		$handles.forEach(($handle, i) => {
@@ -81,29 +82,37 @@
 			offsetY = event.clientY - handlesPositions[i].y
 		}
 		const onMove = (event) => {
+			const isMovingOrigin = event.shiftKey
 			handlesPositions[i].x = event.clientX - offsetX
 			handlesPositions[i].y = event.clientY - offsetY
 
-			if (event.shiftKey) {
-				handlesPositions[i].originX = event.clientX - offsetX
-				handlesPositions[i].originY = event.clientY - offsetY
+			if (isMovingOrigin) {
+				handlesPositions[i].origin.x = handlesPositions[i].x
+				handlesPositions[i].origin.y = handlesPositions[i].y
 			}
 
 			updateHandlesPositions()
 
-			const warpMatrix = Matrix.createWarpMatrix(
-				[handlesPositions[0].originX, handlesPositions[0].originY],
-				[handlesPositions[1].originX, handlesPositions[1].originY],
-				[handlesPositions[2].originX, handlesPositions[2].originY],
-				[handlesPositions[3].originX, handlesPositions[3].originY],
-				[handlesPositions[0].x, handlesPositions[0].y],
-				[handlesPositions[1].x, handlesPositions[1].y],
-				[handlesPositions[2].x, handlesPositions[2].y],
-				[handlesPositions[3].x, handlesPositions[3].y],
-			)
+			const transform = (() => {
+				if (isMovingOrigin) {
+					return ''
+				}
+				const warpMatrix = Matrix.createWarpMatrix(
+					[handlesPositions[0].origin.x, handlesPositions[0].origin.y],
+					[handlesPositions[1].origin.x, handlesPositions[1].origin.y],
+					[handlesPositions[2].origin.x, handlesPositions[2].origin.y],
+					[handlesPositions[3].origin.x, handlesPositions[3].origin.y],
+					[handlesPositions[0].x, handlesPositions[0].y],
+					[handlesPositions[1].x, handlesPositions[1].y],
+					[handlesPositions[2].x, handlesPositions[2].y],
+					[handlesPositions[3].x, handlesPositions[3].y],
+				)
 
-			const transform =
-				'matrix3d(' + Matrix.convertMatrixtoCSS(warpMatrix).join(',') + ')'
+				return (
+					'matrix3d(' + Matrix.convertMatrixtoCSS(warpMatrix).join(',') + ')'
+				)
+			})()
+
 			$video.style.transform = transform
 		}
 		const onEnd = (event) => {
