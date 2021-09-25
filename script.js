@@ -13,10 +13,15 @@
 	const $handles = document.querySelectorAll('.handle')
 
 	const handlesPositions = [
-		{ x: 0, y: 0 },
-		{ x: window.innerWidth, y: 0 },
-		{ x: 0, y: window.innerHeight },
-		{ x: window.innerWidth, y: window.innerHeight },
+		{ x: 0, y: 0, originX: 0, originY: 0 },
+		{ x: window.innerWidth, y: 0, originX: window.innerWidth, originY: 0 },
+		{ x: 0, y: window.innerHeight, originX: 0, originY: window.innerHeight },
+		{
+			x: window.innerWidth,
+			y: window.innerHeight,
+			originX: window.innerWidth,
+			originY: window.innerHeight,
+		},
 	]
 
 	const updateHandlesPositions = () => {
@@ -81,10 +86,10 @@
 			updateHandlesPositions()
 
 			const warpMatrix = Matrix.createWarpMatrix(
-				[0, 0],
-				[window.innerWidth, 0],
-				[0, window.innerHeight],
-				[window.innerWidth, window.innerHeight],
+				[handlesPositions[0].originX, handlesPositions[0].originY],
+				[handlesPositions[1].originX, handlesPositions[1].originY],
+				[handlesPositions[2].originX, handlesPositions[2].originY],
+				[handlesPositions[3].originX, handlesPositions[3].originY],
 				[handlesPositions[0].x, handlesPositions[0].y],
 				[handlesPositions[1].x, handlesPositions[1].y],
 				[handlesPositions[2].x, handlesPositions[2].y],
