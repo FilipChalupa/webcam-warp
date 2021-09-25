@@ -2,6 +2,7 @@
 	const currentUrl = new URL(document.location)
 	if (currentUrl.searchParams.get('reset') !== null) {
 		localStorage.removeItem('lastDeviceId')
+		localStorage.removeItem('positions')
 		currentUrl.searchParams.delete('reset')
 		location.href = currentUrl.toString()
 	}
@@ -19,28 +20,52 @@
 		$body.classList.remove('is-shifting')
 	})
 
-	const handlesPositions = [
-		{ x: 0.1, y: 0.1 },
-		{ x: 0.9, y: 0.1 },
-		{ x: 0.1, y: 0.9 },
-		{ x: 0.9, y: 0.9 },
-	]
-		.map((handle) => ({
-			...handle,
-			origin: { ...handle },
-		}))
-		.map((handle) => {
-			handle.x = handle.x * window.innerWidth
-			handle.y = handle.y * window.innerHeight
-			return {
-				...handle,
-				origin: {
+	const storedPositions = localStorage.getItem('positions')
+	const handlesPositions = storedPositions
+		? JSON.parse(storedPositions)
+		: [
+				{ x: 0.1, y: 0.1 },
+				{ x: 0.9, y: 0.1 },
+				{ x: 0.1, y: 0.9 },
+				{ x: 0.9, y: 0.9 },
+		  ]
+				.map((handle) => ({
 					...handle,
-				},
-			}
-		})
+					origin: { ...handle },
+				}))
+				.map((handle) => {
+					handle.x = handle.x * window.innerWidth
+					handle.y = handle.y * window.innerHeight
+					return {
+						...handle,
+						origin: {
+							...handle,
+						},
+					}
+				})
 
-	const updateHandlesPositions = () => {
+	const updateHandlesPositions = (isMovingOrigin) => {
+		const transform = (() => {
+			if (isMovingOrigin) {
+				return ''
+			}
+			const warpMatrix = Matrix.createWarpMatrix(
+				[handlesPositions[0].origin.x, handlesPositions[0].origin.y],
+				[handlesPositions[1].origin.x, handlesPositions[1].origin.y],
+				[handlesPositions[2].origin.x, handlesPositions[2].origin.y],
+				[handlesPositions[3].origin.x, handlesPositions[3].origin.y],
+				[handlesPositions[0].x, handlesPositions[0].y],
+				[handlesPositions[1].x, handlesPositions[1].y],
+				[handlesPositions[2].x, handlesPositions[2].y],
+				[handlesPositions[3].x, handlesPositions[3].y],
+			)
+
+			return 'matrix3d(' + Matrix.convertMatrixtoCSS(warpMatrix).join(',') + ')'
+		})()
+
+		$video.style.transform = transform
+		localStorage.setItem('positions', JSON.stringify(handlesPositions))
+
 		$handles.forEach(($handle, i) => {
 			$handle.style.setProperty('--x', `${handlesPositions[i].x}px`)
 			$handle.style.setProperty('--y', `${handlesPositions[i].y}px`)
@@ -106,29 +131,7 @@
 				handlesPositions[i].origin.y = handlesPositions[i].y
 			}
 
-			updateHandlesPositions()
-
-			const transform = (() => {
-				if (isMovingOrigin) {
-					return ''
-				}
-				const warpMatrix = Matrix.createWarpMatrix(
-					[handlesPositions[0].origin.x, handlesPositions[0].origin.y],
-					[handlesPositions[1].origin.x, handlesPositions[1].origin.y],
-					[handlesPositions[2].origin.x, handlesPositions[2].origin.y],
-					[handlesPositions[3].origin.x, handlesPositions[3].origin.y],
-					[handlesPositions[0].x, handlesPositions[0].y],
-					[handlesPositions[1].x, handlesPositions[1].y],
-					[handlesPositions[2].x, handlesPositions[2].y],
-					[handlesPositions[3].x, handlesPositions[3].y],
-				)
-
-				return (
-					'matrix3d(' + Matrix.convertMatrixtoCSS(warpMatrix).join(',') + ')'
-				)
-			})()
-
-			$video.style.transform = transform
+			updateHandlesPositions(isMovingOrigin)
 		}
 		const onEnd = (event) => {
 			$handle.removeEventListener('pointermove', onMove)
