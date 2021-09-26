@@ -141,6 +141,7 @@
 			$handle.setPointerCapture(event.pointerId)
 			offsetX = event.clientX - handlesPositions[i].x
 			offsetY = event.clientY - handlesPositions[i].y
+			$body.classList.add('is-moving')
 		}
 		const onMove = (event) => {
 			const isMovingOrigin = event.shiftKey
@@ -157,6 +158,7 @@
 		const onEnd = (event) => {
 			$handle.removeEventListener('pointermove', onMove)
 			$handle.releasePointerCapture(event.pointerId)
+			$body.classList.remove('is-moving')
 		}
 
 		$handle.addEventListener('pointerdown', onStart)

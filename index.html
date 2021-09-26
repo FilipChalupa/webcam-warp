@@ -105,7 +105,13 @@
 			--color-b: #ffffff;
 		}
 
+		.is-moving:not(.is-shifting) .handle:active {
+			box-shadow: 0 0 30px 70px #4e4e4e;
+			background-color: #000000;
+		}
+
 		.handle:active {
+			z-index: 1;
 			cursor: grabbing;
 			--color-a: #ffff00;
 			--color-b: transparent;
