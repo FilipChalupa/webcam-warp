@@ -101,7 +101,7 @@
 					ideal: window.innerHeight,
 				},
 			},
-			audio: false,
+			audio: true,
 		}
 		const stream = await navigator.mediaDevices.getUserMedia(constraints)
 		$video.srcObject = stream
